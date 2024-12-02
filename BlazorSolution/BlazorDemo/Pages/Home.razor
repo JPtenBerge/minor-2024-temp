@@ -1,8 +1,7 @@
 ﻿@page "/"
+@using System.Text.Json
 
 <PageTitle>Home</PageTitle>
-
-Name: @Name
 
 <style>
     td img {
@@ -15,26 +14,64 @@ Name: @Name
     .rotstad {
         opacity: 0.3;
     }
+    form ol {
+        padding:  0;
+        margin: 0;
+        list-style:  none;
+    }
 </style>
+
+<EditForm Model="NewPlaats" OnValidSubmit="AddPlaats">
+    <FluentValidationValidator />
+    <ValidationSummary />
+    
+    <ol>
+        <li>
+            <label for="input-naam">Naam:</label>
+            
+            <InputText @bind-Value="NewPlaats.Name" />
+            
+            @* <input id="input-naam" @bind="NewPlaats.Name" @bind:event="oninput"/> *@
+            <ValidationMessage For="() => NewPlaats.Name"/>
+        </li>
+        <li>
+            <label for="input-rating">Rating:</label>
+            <input id="input-rating" @bind="NewPlaats.Rating"/>
+            <ValidationMessage For="() => NewPlaats.Rating"/>
+        </li>
+        <li>
+            <label for="input-photo-url">Foto URL:</label>
+            <input id="input-photo-url" @bind="NewPlaats.PhotoUrl"/>
+            <ValidationMessage For="() => NewPlaats.PhotoUrl"/>
+        </li>
+        <li>
+            <button>Voeg plaats toe</button>
+        </li>
+        <li>
+            @JsonSerializer.Serialize(NewPlaats)
+        </li>
+    </ol>
+</EditForm>
 
 <table>
     <thead>
-        <tr>
-            <th>Naam</th>
-            <th>Rating</th>
-            <th>Foto</th>
-        </tr>
+    <tr>
+        <th>Naam</th>
+        <th>Rating</th>
+        <th>Foto</th>
+    </tr>
     </thead>
     <tbody>
-        @foreach (var plaats in Plaatsen)
-        {
-            <tr @onclick="() => VerhoogRating(plaats)"
-                class="@(plaats.Rating > 8 ? "fancy" : "rotstad")">
-                <td>@plaats.Name</td>
-                <td>@plaats.Rating</td>
-                <td><img src="@plaats.PhotoUrl" /></td>
-            </tr>
-        }
+    @foreach (var plaats in Plaatsen)
+    {
+        <tr @onclick="() => VerhoogRating(plaats)"
+            class="@(plaats.Rating > 8 ? "fancy" : "rotstad")">
+            <td>@plaats.Name</td>
+            <td>@plaats.Rating</td>
+            <td>
+                <img src="@plaats.PhotoUrl"/>
+            </td>
+        </tr>
+    }
     </tbody>
 </table>
-
