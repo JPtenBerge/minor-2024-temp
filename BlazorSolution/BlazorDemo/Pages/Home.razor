@@ -1,0 +1,40 @@
+﻿@page "/"
+
+<PageTitle>Home</PageTitle>
+
+Name: @Name
+
+<style>
+    td img {
+        max-width: 150px;
+    }
+
+    .fancy {
+        background: lightgoldenrodyellow;
+    }
+    .rotstad {
+        opacity: 0.3;
+    }
+</style>
+
+<table>
+    <thead>
+        <tr>
+            <th>Naam</th>
+            <th>Rating</th>
+            <th>Foto</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var plaats in Plaatsen)
+        {
+            <tr @onclick="() => VerhoogRating(plaats)"
+                class="@(plaats.Rating > 8 ? "fancy" : "rotstad")">
+                <td>@plaats.Name</td>
+                <td>@plaats.Rating</td>
+                <td><img src="@plaats.PhotoUrl" /></td>
+            </tr>
+        }
+    </tbody>
+</table>
+
